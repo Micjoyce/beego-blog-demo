@@ -128,3 +128,50 @@ func GetAllTopics(isDesc bool) ([]*Topic, error) {
 	}
 	return topics, err
 }
+
+// GetTopic xxx
+func GetTopic(tid string) (*Topic, error) {
+	tidNum, err := strconv.ParseInt(tid, 10, 64)
+	if err != nil {
+		return nil, err
+	}
+	o := orm.NewOrm()
+	topic := new(Topic)
+	qs := o.QueryTable("topic")
+	err = qs.Filter("id", tidNum).One(topic)
+	if err != nil {
+		return nil, err
+	}
+	topic.Views++
+	_, err = o.Update(topic)
+	return topic, err
+}
+
+// ModifyTopic modify topic
+func ModifyTopic(tid, title, content string) error {
+	tidNum, err := strconv.ParseInt(tid, 10, 64)
+	if err != nil {
+		return err
+	}
+	o := orm.NewOrm()
+	topic := &Topic{ID: tidNum}
+	if o.Read(topic) == nil {
+		topic.Title = title
+		topic.Content = content
+		topic.Updated = time.Now()
+		o.Update(topic)
+	}
+	return nil
+}
+
+// DeleteTopic delet topic
+func DeleteTopic(tid string) error {
+	tidNum, err := strconv.ParseInt(tid, 10, 64)
+	if err != nil {
+		return err
+	}
+	o := orm.NewOrm()
+	topic := &Topic{ID: tidNum}
+	_, err = o.Delete(topic)
+	return err
+}
