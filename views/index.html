@@ -11,11 +11,15 @@
     </div>
   </nav>
   <div class="container">
+    {{range .Topics}}
     <div class="page-header">
-      <h1>我的第一篇博客</h1>
-      <h6 class="text-muted">文章发表于 2013 年 x 月 x 日 xx:xx, 共有 xx 浏览， xx 评论</h6>
-      <h4>大家好，这是我的第一篇博客，多谢观看</h4>
+      <h1>{{.Title}}</h1>
+      <h6 class="text-muted">文章发表于 {{.Created}}, 共有 {{.Views}} 浏览， {{.ReplyCount}} 评论</h6>
+      <p>
+        {{.Content}}
+      </p>
     </div>
+    {{end}}
   </div>
   {{template "footer"}}
 </body>

@@ -60,6 +60,5 @@ func checkAccount(ctx *beecontext.Context) bool {
 	if password != beego.AppConfig.String("password") {
 		return false
 	}
-	fmt.Println("--------------------")
 	return true
 }

@@ -38,6 +38,7 @@ type Topic struct {
 	Content         string `orm:"size(5000)"`
 	Attachment      string
 	Created         time.Time `orm:"index"`
+	Updated         time.Time `orm:"index"`
 	Views           int64     `orm:"index"`
 	Author          string
 	ReplyTime       time.Time
@@ -96,4 +97,34 @@ func DelCategory(id string) error {
 	category := &Category{ID: cid}
 	_, err = o.Delete(category)
 	return err
+}
+
+// AddTopic create topic
+func AddTopic(title, content string) error {
+	o := orm.NewOrm()
+
+	topic := &Topic{
+		Title:     title,
+		Content:   content,
+		Created:   time.Now(),
+		Updated:   time.Now(),
+		ReplyTime: time.Now(),
+	}
+	_, err := o.Insert(topic)
+	return err
+}
+
+// GetAllTopics xxx
+func GetAllTopics(isDesc bool) ([]*Topic, error) {
+	o := orm.NewOrm()
+
+	topics := make([]*Topic, 0)
+	qs := o.QueryTable("topic")
+	var err error
+	if isDesc {
+		_, err = qs.OrderBy("-created").All(&topics)
+	} else {
+		_, err = qs.All(&topics)
+	}
+	return topics, err
 }
