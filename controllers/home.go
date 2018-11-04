@@ -4,12 +4,14 @@ import (
 	"github.com/astaxie/beego"
 )
 
+// MainController xxxx
 type MainController struct {
 	beego.Controller
 }
 
+// Get home get
 func (c *MainController) Get() {
-	c.Data["Website"] = "beego.me"
-	c.Data["Email"] = "astaxie@gmail.com"
+	c.Data["IsHome"] = true
+	c.Data["IsLogin"] = checkAccount(c.Ctx)
 	c.TplName = "index.html"
 }

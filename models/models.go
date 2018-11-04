@@ -3,6 +3,7 @@ package models
 import (
 	"os"
 	"path"
+	"strconv"
 	"time"
 
 	"github.com/astaxie/beego/orm"
@@ -44,6 +45,7 @@ type Topic struct {
 	ReplyLastuserID int64
 }
 
+// RegisterDB xxx
 func RegisterDB() {
 	if !com.IsExist(DBNAME) {
 		os.MkdirAll(path.Dir(DBNAME), os.ModePerm)
@@ -52,4 +54,46 @@ func RegisterDB() {
 	orm.RegisterModel(new(Category), new(Topic))
 	orm.RegisterDriver(SQLITE3DRIVER, orm.DRSqlite)
 	orm.RegisterDataBase("default", SQLITE3DRIVER, DBNAME, 10)
+}
+
+// AddCategory create category
+func AddCategory(name string) error {
+	o := orm.NewOrm()
+
+	category := &Category{Title: name, Created: time.Now(), TopicTime: time.Now()}
+
+	qs := o.QueryTable("category")
+
+	err := qs.Filter("title", name).One(category)
+
+	if err == nil {
+		return err
+	}
+	_, err = o.Insert(category)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// GetAllCategories get all categories
+func GetAllCategories() ([]*Category, error) {
+	o := orm.NewOrm()
+
+	categories := make([]*Category, 0)
+	qs := o.QueryTable("category")
+	_, err := qs.All(&categories)
+	return categories, err
+}
+
+// DelCategory delete category
+func DelCategory(id string) error {
+	cid, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		return err
+	}
+	o := orm.NewOrm()
+	category := &Category{ID: cid}
+	_, err = o.Delete(category)
+	return err
 }

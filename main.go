@@ -1,6 +1,7 @@
 package main
 
 import (
+	"myblog/controllers"
 	"myblog/models"
 	_ "myblog/routers"
 
@@ -17,6 +18,10 @@ func main() {
 	orm.RunSyncdb("default", false, true)
 	o := orm.NewOrm()
 	o.Using("default")
+
+	beego.Router("/", &controllers.MainController{})
+	beego.Router("/login", &controllers.LoginController{})
+	beego.Router("/category", &controllers.CategoryController{})
 
 	beego.Run()
 }
