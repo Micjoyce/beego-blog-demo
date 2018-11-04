@@ -34,12 +34,13 @@ func (c *TopicController) Post() {
 	content := c.Input().Get("content")
 	fmt.Println("content", content)
 	tid := c.Input().Get("tid")
+	category := c.Input().Get("category")
 
 	var err error
 	if len(tid) == 0 {
-		err = models.AddTopic(title, content)
+		err = models.AddTopic(title, category, content)
 	} else {
-		err = models.ModifyTopic(tid, title, content)
+		err = models.ModifyTopic(tid, title, category, content)
 	}
 	if err != nil {
 		beego.Error(err)

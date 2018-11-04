@@ -18,6 +18,7 @@
         <tr>
           <th>#</th>
           <th>文章名称</th>
+          <th>文章目录</th>
           <th>最后更新</th>
           <th>浏览</th>
           <th>回复数</th>
@@ -29,10 +30,14 @@
           <tr onclick="goToDetail({{.ID}})">
             <td>{{.ID}}</td>
             <td>{{.Title}}</td>
+            <td>{{.Category}}</td>
             <td>{{.Updated}}</td>
             <td>{{.Views}}</td>
             <td>{{.ReplyCount}}</td>
-            <td><a href="/topic/delete/{{.ID}}">删除</a></td>
+            <td>
+              <a href="/topic/modify?tid={{.ID}}">修改</a>
+              <a href="/topic/delete/{{.ID}}">删除</a>
+            </td>
           </tr>
         {{end}}
       </tbody>
