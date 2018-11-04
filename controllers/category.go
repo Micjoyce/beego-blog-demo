@@ -15,6 +15,7 @@ type CategoryController struct {
 // Get xx
 func (c *CategoryController) Get() {
 	op := c.Input().Get("op")
+	c.Data["IsLogin"] = checkAccount(c.Ctx)
 	switch op {
 	case "add":
 		name := c.Input().Get("category")

@@ -26,7 +26,7 @@
       </thead>
       <tbody>
         {{range .Topics}}
-          <tr>
+          <tr onclick="goToDetail({{.ID}})">
             <td>{{.ID}}</td>
             <td>{{.Title}}</td>
             <td>{{.Updated}}</td>
@@ -39,5 +39,10 @@
     </table>
   </div>
   {{template "footer"}}
+  <script>
+    function goToDetail(tid) {
+      window.location.href = "/topic/view/" + tid
+    }
+  </script>
 </body>
 </html>

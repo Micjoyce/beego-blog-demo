@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"myblog/models"
 
 	"github.com/astaxie/beego"
@@ -31,6 +32,7 @@ func (c *TopicController) Post() {
 	}
 	title := c.Input().Get("title")
 	content := c.Input().Get("content")
+	fmt.Println("content", content)
 	tid := c.Input().Get("tid")
 
 	var err error
@@ -47,6 +49,7 @@ func (c *TopicController) Post() {
 
 // Add xxx
 func (c *TopicController) Add() {
+	c.Data["IsLogin"] = checkAccount(c.Ctx)
 	c.TplName = "topic_add.html"
 }
 
@@ -59,6 +62,7 @@ func (c *TopicController) View() {
 		c.Redirect("/", 302)
 		return
 	}
+	c.Data["IsLogin"] = checkAccount(c.Ctx)
 	c.Data["Topic"] = topic
 	c.Data["Tid"] = c.Ctx.Input.Params()["0"]
 }
@@ -74,7 +78,7 @@ func (c *TopicController) Modify() {
 		c.Redirect("/", 302)
 		return
 	}
-
+	c.Data["IsLogin"] = checkAccount(c.Ctx)
 	c.Data["Topic"] = topic
 	c.Data["Tid"] = tid
 }
@@ -89,5 +93,5 @@ func (c *TopicController) Delete() {
 	if err != nil {
 		beego.Error(err)
 	}
-	c.Redirect("/", 302)
+	c.Redirect("/topic", 302)
 }
